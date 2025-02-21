@@ -6,21 +6,21 @@ import seaborn as sns
 import numpy as np
 
 # ✅ Load encoder, scaler, and trained model
-with open("onehot_encoder.pkl", "rb") as f:
+with open("c://Users//aditi.khare//Downloads//onehot_encoder.pkl", "rb") as f:
     encoder = pickle.load(f)
 
-with open("scaler.pkl", "rb") as f:
+with open("c://Users//aditi.khare//Downloads//scaler.pkl", "rb") as f:
     scaler = pickle.load(f)
 
 # Load the dictionary containing multiple models
-with open("trained_model.pkl", "rb") as f:
+with open("c://Users//aditi.khare//Downloads//trained_model.pkl", "rb") as f:
     models = pickle.load(f)
 
 # Extract the "Logistic Regression" model
 model = models["Logistic Regression"]
 
 # ✅ Load dataset (for unique values)
-df = pd.read_csv("Crosswalk2015.csv")
+df = pd.read_csv("C://Users//aditi.khare//Downloads//archive (8)/Crosswalk2015.csv")
 
 # ✅ Extract unique values for dropdowns
 unique_values = {
@@ -170,9 +170,9 @@ def visualize_data(df):
         issuer_names = [issuer_id_to_company_name.get(i, str(i)) for i in top_issuers.index]
         sns.barplot(x=issuer_names, y=top_issuers.values, palette="viridis")
         plt.title("Top 10 Issuers(names)", fontsize=12)
-        plt.xlabel("Issuer Name", fontsize=10)
+        plt.xlabel("Issuer Name", fontsize=8)
         plt.ylabel("Plans", fontsize=10)
-        plt.xticks(rotation=45)
+        plt.xticks(rotation=45,fontsize=6)
         st.pyplot(plt.gcf())
 
    
@@ -193,8 +193,11 @@ def visualize_data(df):
 
     with col4:
         plt.figure(figsize=(2,2))
-        df['MetalLevel_2014'].value_counts().plot.pie(autopct='%1.1f%%', cmap="Pastel1", startangle=90, textprops={'fontsize': 6})
-        plt.title("Membership Tier", fontsize=8)
+        df['MetalLevel_2014'].value_counts().plot.pie(
+            autopct='%1.1f%%', cmap="Pastel1", startangle=90, 
+            textprops={'fontsize': 3},
+            wedgeprops={'linewidth': 1, 'edgecolor': 'white'})
+        plt.title("Membership Tier", fontsize=4)
         plt.ylabel('')
         
         st.pyplot(plt.gcf())
