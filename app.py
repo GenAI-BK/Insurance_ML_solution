@@ -6,21 +6,21 @@ import seaborn as sns
 import numpy as np
 
 # ✅ Load encoder, scaler, and trained model
-with open("/onehot_encoder.pkl", "rb") as f:
+with open("onehot_encoder.pkl", "rb") as f:
     encoder = pickle.load(f)
 
-with open("/scaler.pkl", "rb") as f:
+with open("scaler.pkl", "rb") as f:
     scaler = pickle.load(f)
 
 # Load the dictionary containing multiple models
-with open("/trained_model.pkl", "rb") as f:
+with open("trained_model.pkl", "rb") as f:
     models = pickle.load(f)
 
 # Extract the "Logistic Regression" model
 model = models["Logistic Regression"]
 
 # ✅ Load dataset (for unique values)
-df = pd.read_csv("/Crosswalk2015.csv")
+df = pd.read_csv("Crosswalk2015.csv")
 
 # ✅ Extract unique values for dropdowns
 unique_values = {
