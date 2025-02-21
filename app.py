@@ -91,7 +91,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.title("📊 Insurance Cross Sell Prediction")
+st.title("📊 Insurance sell prediction")
 
 # ✅ Collect user input with mapped labels
 user_input = pd.DataFrame({
