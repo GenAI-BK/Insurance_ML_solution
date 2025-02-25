@@ -87,65 +87,147 @@ st.markdown(
             color: white;
             border-radius: 8px;
         }
-    </style>''',
-    unsafe_allow_html=True
-)
+.st-emotion-cache-18netey.egexzqm2 h1 {
+    font-size: 1.75rem;
+    padding-bottom: 30px;
+    position: relative;
+    padding-top:0;
+}
+.st-emotion-cache-89jlt8.egexzqm0 p {
+    font-weight: 600;
+}
 
-st.title("📊 Insurance sell prediction")
-
-# ✅ Collect user input with mapped labels
-user_input = pd.DataFrame({
-    "PlanID_2014": [st.selectbox("USER ID", unique_values["PlanID_2014"])],
-    "ChildAdultOnly_2014": [st.selectbox(
-        "Benefit Plan", 
-        options=list(child_adult_mapping.keys()), 
-        format_func=lambda x: child_adult_mapping[x]
-    )],
-    "MultistatePlan_2014": [st.selectbox("Multistate Plan", unique_values["MultistatePlan_2014"])],
-    "MetalLevel_2014": [st.selectbox("Membership Tier", unique_values["MetalLevel_2014"])],
-    "ReasonForCrosswalk": [st.selectbox(
-        "Reason For Crosswalk", 
-        options=list(reason_for_crosswalk_mapping.keys()), 
-        format_func=lambda x: reason_for_crosswalk_mapping[x]
-    )],
-    "CrosswalkLevel": [st.selectbox(
-        "Crosswalk Level", 
-        options=list(crosswalk_level_mapping.keys()), 
-        format_func=lambda x: crosswalk_level_mapping[x]
-    )],
-    "IssuerID_2014": [st.selectbox(
-        "Issuer ID (Insurance Company)", 
-        options=list(issuer_id_to_company_name.keys()), 
-        format_func=lambda x: issuer_id_to_company_name[x]
-    )]
+.st-emotion-cache-18netey.egexzqm2 h1:after {
+    content: "";
+    position: absolute;
+    background: #16c60c;
+    width: 50px;
+    height: 3px;
+    left: 43px;
+    top: 40px;
     
-})
+}
+.st-emotion-cache-1104ytp h3 {
+    font-size: 1.5rem;
+    font-weight:800;
+    
+}
+.stElementContainer.element-container.st-emotion-cache-1w8hq0f.e6rk8up1 h3{
+    font-size: 1.75rem;
+    padding-bottom: 30px;
+    position: relative;
+    padding-top:30px;
+}
+.stElementContainer.element-container.st-emotion-cache-1w8hq0f.e6rk8up1 h3:after{
+    content: "";
+    position: absolute;
+    background: #16c60c;
+    width: 50px;
+    height: 3px;
+    left: 43px;
+    top: 70px;
+}
+.stButton button:hover, .stButton button:focus {
+    background: #2e9332;
+    color: #fff !important;
+    border-color: transparent !important;
+}
+.stMainBlockContainer {
+    background: #f3f3f3;
+}
+.stColumn.st-emotion-cache-wt9exi.e6rk8up2 {
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 15px #ddd;
+    border-radius: 10px;
+}
 
-user_input_cat = encoder.transform(user_input[["ChildAdultOnly_2014", "MultistatePlan_2014", "MetalLevel_2014"]])
-user_input_encoded = pd.DataFrame(user_input_cat, columns=encoder.get_feature_names_out())
+.stHorizontalBlock.st-emotion-cache-ocqkz7:nth-child(1) .stColumn.st-emotion-cache-wt9exi.e6rk8up2 {
+    background: none;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+}
+    </style>''',
 
-user_input_num = pd.DataFrame(
-    scaler.transform(user_input[["ReasonForCrosswalk", "CrosswalkLevel", "IssuerID_2014"]]), 
-    columns=["ReasonForCrosswalk", "CrosswalkLevel", "IssuerID_2014"]
+    unsafe_allow_html=True
+
 )
+st.logo("bk-logo.png", size="medium", link=None, icon_image=None)
+st.title("📊 Insurance Cross Sell Prediction")
 
-user_input_final = pd.concat([user_input_encoded, user_input_num], axis=1)
+col_left, col_right = st.columns([1,1])
+
+with col_left:
+    # ✅ Collect user input with mapped labels
+    col1, col2 = st.columns(2)
+    with col1:
+        plan_id = st.selectbox("USER ID", unique_values["PlanID_2014"])
+        benefit_plan = st.selectbox(
+            "Benefit Plan",
+            options=list(child_adult_mapping.keys()),
+            format_func=lambda x: child_adult_mapping[x]
+        )
+        crosswalk_level = st.selectbox(
+        "Crosswalk Level",
+        options=list(crosswalk_level_mapping.keys()),
+        format_func=lambda x: crosswalk_level_mapping[x]
+    )
+        issuer_id = st.selectbox(
+        "Issuer ID (Insurance Company)",
+        options=list(issuer_id_to_company_name.keys()),
+        format_func=lambda x: issuer_id_to_company_name[x]
+    )
+ 
+    with col2:
+        multistate_plan = st.selectbox("Multistate Plan", unique_values["MultistatePlan_2014"])
+        membership_tier = st.selectbox("Membership Tier", unique_values["MetalLevel_2014"])
+        reason_for_crosswalk = st.selectbox(
+        "Reason For Crosswalk",
+        options=list(reason_for_crosswalk_mapping.keys()),
+        format_func=lambda x: reason_for_crosswalk_mapping[x]
+    )
+ 
+
+   
+
+    
+
+    
+
+    user_input = pd.DataFrame({
+        "PlanID_2014": [plan_id],
+        "ChildAdultOnly_2014": [benefit_plan],
+        "MultistatePlan_2014": [multistate_plan],
+        "MetalLevel_2014": [membership_tier],
+        "ReasonForCrosswalk": [reason_for_crosswalk],
+        "CrosswalkLevel": [crosswalk_level],
+        "IssuerID_2014": [issuer_id]
+    })
 
 
-prediction_proba = model.predict_proba(user_input_final)[0]
-st.subheader("Prediction Probabilities")
-labels = ["Discontinue", "Continued"]
-fig, ax = plt.subplots()
-sns.barplot(x=labels, y=prediction_proba * 100, palette="pastel")
-ax.set_ylabel("Probability (%)")
-ax.set_ylim(0, 100)
-for i, v in enumerate(prediction_proba * 100):
+
+with col_right:
+    user_input_cat = encoder.transform(user_input[["ChildAdultOnly_2014", "MultistatePlan_2014", "MetalLevel_2014"]])
+    user_input_encoded = pd.DataFrame(user_input_cat, columns=encoder.get_feature_names_out())
+
+    user_input_num = pd.DataFrame(
+        scaler.transform(user_input[["ReasonForCrosswalk", "CrosswalkLevel", "IssuerID_2014"]]), 
+        columns=["ReasonForCrosswalk", "CrosswalkLevel", "IssuerID_2014"]
+    )
+
+    user_input_final = pd.concat([user_input_encoded, user_input_num], axis=1)
+
+    prediction_proba = model.predict_proba(user_input_final)[0]
+    st.subheader("Prediction Probabilities")
+    labels = ["Discontinue", "Continued"]
+    fig, ax = plt.subplots()
+    sns.barplot(x=labels, y=prediction_proba * 100, palette="pastel")
+    ax.set_ylabel("Probability (%)")
+    ax.set_ylim(0, 100)
+    for i, v in enumerate(prediction_proba * 100):
         ax.text(i, v + 2, f"{v:.2f}%", ha="center", fontsize=12)
-st.pyplot(fig)
-
-
-
-
+    st.pyplot(fig)
 
 # Visualization function with enhanced styling
 def visualize_data(df):
@@ -203,10 +285,5 @@ def visualize_data(df):
         st.pyplot(plt.gcf())
 
 
-   
-
-
 if st.button("📊 Show Dashboard"):
-    visualize_data(df)
-
-
+    visualize_data(df)    
