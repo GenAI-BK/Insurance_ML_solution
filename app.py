@@ -70,7 +70,7 @@ issuer_id_to_company_name = {
     71268: "WellCare",
     88380: "Centene Corporation"
 }
-st.set_page_config(page_title="Insurance Cross Sell Prediction", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Insurance Sell Prediction", page_icon="📊", layout="wide")
 
 st.markdown(
     '''<style>
@@ -154,7 +154,7 @@ st.markdown(
 
 )
 st.logo("bk-logo.png", size="medium", link=None, icon_image=None)
-st.title("📊 Insurance Cross Sell Prediction")
+st.title("📊 Insurance Sell Prediction")
 
 col_left, col_right = st.columns([1,1])
 
